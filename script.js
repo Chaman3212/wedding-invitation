@@ -238,6 +238,33 @@ async function playMusic() {
     }
   }
 }
+function enableMusicOnInteraction() {
+  const startMusic = () => {
+    const audio = document.getElementById("wedding-audio");
+
+    if (!audio || !audio.paused) return;
+
+    audio.play()
+      .then(() => {
+        document.body.classList.add("music-playing");
+
+        const musicBtn = document.getElementById("music-btn");
+        if (musicBtn) {
+          musicBtn.textContent = "♫ Sound On";
+        }
+      })
+      .catch(() => {
+        // Browser ne autoplay block kiya hai.
+        // Agle user interaction par dobara try hoga.
+      });
+  };
+
+  window.addEventListener("scroll", startMusic, { passive: true });
+  window.addEventListener("click", startMusic);
+  window.addEventListener("touchstart", startMusic, { passive: true });
+  window.addEventListener("keydown", startMusic);
+  window.addEventListener("wheel", startMusic, { passive: true });
+}
 
 function pauseMusic() {
   if (!weddingAudio) return;
@@ -385,7 +412,7 @@ function setupProgress() {
 
 async function useUploadedPortraits() {
   const portraits = {
-    groom: "assets/gaurav.png",
+    groom: "assets/Gaurav.png",
     bride: "assets/rinki.png"
   };
 
@@ -423,6 +450,7 @@ splitText();
 
 setupOpening();
 setupMusic();
+enableMusicOnInteraction(); // NEW LINE
 setupShare();
 setupNav();
 setupProgress();
